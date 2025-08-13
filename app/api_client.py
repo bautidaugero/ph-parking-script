@@ -2,7 +2,6 @@ import requests
 import base64
 import sys
 import os
-import json
 
 # Agregar el directorio del proyecto al path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -11,7 +10,7 @@ from config import Config
 
 class ApiClient:
     def __init__(self):
-        # Usar la configuración directamente sin Flask
+        """Inicializa el cliente con la configuración de la API"""
         self.base_url = Config.API_BASE_URL
         self.username = Config.API_USERNAME
         self.password = Config.API_PASSWORD
@@ -19,12 +18,13 @@ class ApiClient:
         self.group_name = Config.GROUP_NAME
 
     def _get_auth_header(self):
+        """Genera el header de autenticación Basic Auth"""
         credentials = f"{self.username}:{self.password}"
         encoded_credentials = base64.b64encode(credentials.encode()).decode()
         return {'Authorization': f'Basic {encoded_credentials}'}
     
     def get_group_info(self):
-        """Obtiene informacion del grupo actual"""
+        """Obtiene información del grupo actual"""
         try:
             url = f"{self.base_url}/accountGroup/{self.group_id}"
             headers = self._get_auth_header()
@@ -39,7 +39,7 @@ class ApiClient:
         except requests.exceptions.RequestException as e:
             return {
                 'success': False,
-                'error': f'Error al obtener informacion del grupo: {str(e)}'
+                'error': f'Error al obtener información del grupo: {str(e)}'
             }
         
     def update_group_accounts(self, accounts_list):
@@ -63,7 +63,7 @@ class ApiClient:
                 },
                 "id": self.group_id
             }
-            print(f"🔍 Enviando JSON: {json.dumps(payload, indent=2)}")
+
             response = requests.put(url, headers=headers, json=payload)
             response.raise_for_status()
 
