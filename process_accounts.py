@@ -7,6 +7,8 @@ from datetime import datetime
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
+sys.stdout = open("log.txt", "a", encoding="utf-8")
+
 from app.api_client import ApiClient
 from app.utils import validate_accounts
 
